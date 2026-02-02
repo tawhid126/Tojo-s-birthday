@@ -1,0 +1,1909 @@
+<!--
+    🎂 TOJO'S BIRTHDAY WEBSITE 🎂
+    =============================
+    Instructions:
+    1. Put your images in assets/images/ folder (name them 1.jpg, 2.jpg, 3.jpg, etc.)
+    2. Open this file in a browser
+    3. Enjoy! ❤️
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Tojo! 💕 | v1.0.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0d1117;
+            --bg-terminal: #161b22;
+            --neon-pink: #ff6b9d;
+            --neon-purple: #c084fc;
+            --neon-cyan: #22d3ee;
+            --text-green: #7ee787;
+            --text-white: #e6edf3;
+            --text-gray: #8b949e;
+            --border-color: #30363d;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
+            50% { text-shadow: 0 0 20px var(--neon-purple), 0 0 40px var(--neon-purple); }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+        }
+
+        @keyframes rotate3d {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        @keyframes floatRotate {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            25% { transform: translateY(-15px) rotateY(90deg); }
+            50% { transform: translateY(0) rotateY(180deg); }
+            75% { transform: translateY(-15px) rotateY(270deg); }
+        }
+
+        @keyframes cubeRotate {
+            0% { transform: rotateX(-20deg) rotateY(0deg); }
+            100% { transform: rotateX(-20deg) rotateY(360deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: scale(1, 1) rotate(-2deg); opacity: 1; }
+            25% { transform: scale(1.1, 1.2) rotate(2deg); opacity: 0.9; }
+            50% { transform: scale(0.9, 1.1) rotate(-1deg); opacity: 1; }
+            75% { transform: scale(1.05, 0.95) rotate(1deg); opacity: 0.95; }
+        }
+
+        @keyframes cakeFloat {
+            0%, 100% { transform: rotateX(-15deg) rotateY(0deg) translateY(0); }
+            50% { transform: rotateX(-15deg) rotateY(180deg) translateY(-15px); }
+        }
+
+        @keyframes candleGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 200, 100, 0.8), 0 0 20px rgba(255, 150, 50, 0.6); }
+            50% { box-shadow: 0 0 15px rgba(255, 200, 100, 1), 0 0 30px rgba(255, 150, 50, 0.8); }
+        }
+
+        body {
+            font-family: 'Courier New', Consolas, monospace;
+            background: var(--bg-dark);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Boot Sequence */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #boot-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .boot-text {
+            color: var(--text-green);
+            font-size: 1.2rem;
+            margin: 8px 0;
+            opacity: 0;
+        }
+
+        .boot-text.show {
+            opacity: 1;
+        }
+
+        .boot-text .cursor {
+            animation: blink 0.7s infinite;
+        }
+
+        .boot-heart {
+            font-size: 4rem;
+            margin-top: 30px;
+            opacity: 0;
+            animation: heartbeat 1s infinite;
+        }
+
+        .boot-heart.show {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        #main-content {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #main-content.show {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(192, 132, 252, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .version-badge {
+            background: var(--bg-terminal);
+            border: 1px solid var(--neon-purple);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--neon-purple);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite, fadeInUp 0.8s ease forwards;
+            animation-delay: 0s, 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        /* Commit Message Card */
+        .commit-card {
+            background: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+            margin: 20px 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.6s;
+            opacity: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .commit-card:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) translateY(-5px);
+            box-shadow: 10px 15px 40px rgba(255, 107, 157, 0.2), -5px -5px 20px rgba(192, 132, 252, 0.1);
+            border-color: var(--neon-pink);
+        }
+
+        .commit-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--text-green);
+        }
+
+        .commit-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .commit-title {
+            color: var(--neon-pink);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .commit-body {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .commit-body p {
+            margin: 10px 0;
+        }
+
+        .commit-stats {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+
+        .stat {
+            color: var(--text-green);
+        }
+
+        .stat.love {
+            color: var(--neon-pink);
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.8s;
+            opacity: 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: 2px solid var(--neon-pink);
+            background: transparent;
+            color: var(--neon-pink);
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--neon-pink);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn.primary {
+            background: var(--neon-pink);
+            color: var(--bg-dark);
+        }
+
+        .btn.primary:hover {
+            background: var(--neon-purple);
+            border-color: var(--neon-purple);
+        }
+
+        /* Terminal Section */
+        .terminal-section {
+            padding: 80px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal {
+            background: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: var(--border-color);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27ca40; }
+
+        .terminal-title {
+            margin-left: 10px;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            min-height: 300px;
+            font-size: 0.95rem;
+        }
+
+        .terminal-line {
+            margin: 8px 0;
+            opacity: 0;
+        }
+
+        .terminal-line.show {
+            opacity: 1;
+        }
+
+        .terminal-line .prompt {
+            color: var(--neon-purple);
+        }
+
+        .terminal-line .command {
+            color: var(--text-green);
+        }
+
+        .terminal-line .output {
+            color: var(--text-white);
+            padding-left: 20px;
+            display: block;
+        }
+
+        .terminal-line .heart {
+            color: var(--neon-pink);
+        }
+
+        /* Git Log Section */
+        .git-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, transparent 0%, rgba(192, 132, 252, 0.05) 50%, transparent 100%);
+        }
+
+        .git-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .git-log {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .git-log::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
+        }
+
+        .commit-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .commit-item:hover {
+            border-color: var(--neon-pink);
+            transform: translateX(5px) perspective(500px) rotateX(2deg) rotateY(-3deg);
+            box-shadow: 5px 5px 20px rgba(255, 107, 157, 0.2);
+        }
+
+        .commit-item::before {
+            content: '💕';
+            position: absolute;
+            left: -38px;
+            top: 20px;
+            font-size: 1rem;
+            background: var(--bg-dark);
+            padding: 5px;
+        }
+
+        .commit-hash {
+            color: var(--neon-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .commit-message {
+            color: var(--text-white);
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .commit-date {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Merge Request Section */
+        .merge-section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .merge-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-terminal);
+            border: 2px solid var(--neon-purple);
+            border-radius: 15px;
+            padding: 40px;
+            animation: float 3s ease-in-out infinite;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .merge-card:hover {
+            animation-play-state: paused;
+            transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) scale(1.02);
+            box-shadow: 20px 20px 60px rgba(192, 132, 252, 0.3), -10px -10px 30px rgba(255, 107, 157, 0.2);
+        }
+
+        .merge-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .merge-title {
+            font-size: 1.5rem;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+        }
+
+        .merge-desc {
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        .merge-btn {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .merge-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.4);
+        }
+
+        .merge-success {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(126, 231, 135, 0.1);
+            border: 1px solid var(--text-green);
+            border-radius: 10px;
+            color: var(--text-green);
+        }
+
+        .merge-success.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 157, 0.05) 50%, transparent 100%);
+        }
+
+        .gallery-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            transition: all 0.5s ease;
+            aspect-ratio: 3/4;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--neon-pink);
+            transform: perspective(1000px) rotateY(10deg) rotateX(5deg) scale(1.05);
+            box-shadow: -20px 20px 50px rgba(255, 107, 157, 0.3), 0 0 30px rgba(192, 132, 252, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item::after {
+            content: '❤️';
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* 3D Heart Section */
+        .heart-3d-section {
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 157, 0.08) 50%, transparent 100%);
+            perspective: 1200px;
+        }
+
+        .cube-container {
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+            margin: 40px auto;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: cubeRotate 8s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(192, 132, 252, 0.15) 100%);
+            border: 2px solid var(--neon-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 0 50px rgba(255, 107, 157, 0.1);
+        }
+
+        .cube-face.front  { transform: translateZ(100px); }
+        .cube-face.back   { transform: rotateY(180deg) translateZ(100px); }
+        .cube-face.right  { transform: rotateY(90deg) translateZ(100px); }
+        .cube-face.left   { transform: rotateY(-90deg) translateZ(100px); }
+        .cube-face.top    { transform: rotateX(90deg) translateZ(100px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        .heart-3d-title {
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .heart-3d-text {
+            color: var(--text-gray);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.8;
+        }
+
+        /* 3D Card Flip */
+        .card-3d-container {
+            perspective: 1000px;
+            width: 300px;
+            height: 400px;
+            margin: 30px auto;
+        }
+
+        .content-3d-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            width: 100%;
+            max-width: 1200px;
+            flex-wrap: wrap;
+        }
+
+        .cube-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card-3d.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-3d-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 2px solid var(--neon-purple);
+            box-sizing: border-box;
+        }
+
+        .card-3d-front {
+            background: linear-gradient(135deg, var(--bg-terminal) 0%, rgba(192, 132, 252, 0.1) 100%);
+            z-index: 2;
+        }
+
+        .card-3d-back {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, var(--bg-terminal) 100%);
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        .card-3d-front .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .card-3d-front h3 {
+            color: var(--neon-pink);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .card-3d-front p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .card-3d-back p {
+            color: var(--text-white);
+            font-size: 1rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .card-3d-back .signature {
+            margin-top: 20px;
+            color: var(--neon-pink);
+            font-size: 1.2rem;
+        }
+
+        /* 3D Birthday Cake - Beautiful Design */
+        .cake-section {
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(192, 132, 252, 0.08) 50%, transparent 100%);
+        }
+
+        .cake-title {
+            font-size: 1.8rem;
+            color: var(--neon-pink);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .cake-subtitle {
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .cake-wrapper {
+            position: relative;
+            width: 320px;
+            height: 380px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        /* The Cake */
+        .birthday-cake {
+            position: relative;
+            width: 280px;
+        }
+
+        /* Cake Stand/Plate */
+        .cake-stand {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            background: linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%);
+            border-radius: 50%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3), inset 0 -3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cake-stand::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 8px;
+            background: linear-gradient(180deg, #d4d4d4 0%, #a3a3a3 100%);
+            border-radius: 50%;
+        }
+
+        /* Bottom Layer */
+        .layer-bottom {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 90px;
+            background: linear-gradient(180deg, #ff85b3 0%, #ff5c8d 50%, #e84a7a 100%);
+            border-radius: 20px 20px 25px 25px;
+            box-shadow: 0 8px 25px rgba(255, 92, 141, 0.5), inset 0 -15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .layer-bottom::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -5px;
+            right: -5px;
+            height: 25px;
+            background: linear-gradient(180deg, #fff5f8 0%, #ffcce0 100%);
+            border-radius: 50% 50% 20px 20px;
+            box-shadow: 0 3px 10px rgba(255, 92, 141, 0.3);
+        }
+
+        /* Frosting drips on bottom layer */
+        .layer-bottom::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 20px;
+            width: 25px;
+            height: 35px;
+            background: linear-gradient(180deg, #ffcce0 0%, #ffb8d4 100%);
+            border-radius: 0 0 50% 50%;
+            box-shadow: 45px 5px 0 #ffcce0, 90px -3px 0 #ffd6e8, 135px 8px 0 #ffcce0, 175px 0 0 #ffd6e8;
+        }
+
+        /* Middle Layer */
+        .layer-middle {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 210px;
+            height: 80px;
+            background: linear-gradient(180deg, #d8b4fe 0%, #c084fc 50%, #a855f7 100%);
+            border-radius: 18px 18px 22px 22px;
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5), inset 0 -12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .layer-middle::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -4px;
+            right: -4px;
+            height: 22px;
+            background: linear-gradient(180deg, #f5f0ff 0%, #e9d5ff 100%);
+            border-radius: 50% 50% 18px 18px;
+            box-shadow: 0 3px 8px rgba(168, 85, 247, 0.3);
+        }
+
+        .layer-middle::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(180deg, #e9d5ff 0%, #d8b4fe 100%);
+            border-radius: 0 0 50% 50%;
+            box-shadow: 35px 4px 0 #e9d5ff, 70px -2px 0 #f3e8ff, 105px 6px 0 #e9d5ff, 145px 0 0 #f3e8ff;
+        }
+
+        /* Top Layer */
+        .layer-top {
+            position: absolute;
+            bottom: 175px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 70px;
+            background: linear-gradient(180deg, #67e8f9 0%, #22d3ee 50%, #06b6d4 100%);
+            border-radius: 16px 16px 20px 20px;
+            box-shadow: 0 5px 18px rgba(6, 182, 212, 0.5), inset 0 -10px 22px rgba(0, 0, 0, 0.15);
+        }
+
+        .layer-top::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -3px;
+            right: -3px;
+            height: 20px;
+            background: linear-gradient(180deg, #f0fdff 0%, #cffafe 100%);
+            border-radius: 50% 50% 16px 16px;
+            box-shadow: 0 2px 6px rgba(6, 182, 212, 0.3);
+        }
+
+        .layer-top::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            width: 18px;
+            height: 25px;
+            background: linear-gradient(180deg, #cffafe 0%, #a5f3fc 100%);
+            border-radius: 0 0 50% 50%;
+            box-shadow: 28px 3px 0 #cffafe, 56px -1px 0 #e0fcff, 84px 5px 0 #cffafe, 110px 2px 0 #e0fcff;
+        }
+
+        /* Decorations - Cherries/Berries */
+        .decorations {
+            position: absolute;
+            bottom: 243px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+        }
+
+        .cherry {
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle at 30% 30%, #ff6b8a 0%, #dc2626 60%, #991b1b 100%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 3px 8px rgba(220, 38, 38, 0.5), inset -2px -2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .cherry::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            width: 2px;
+            height: 12px;
+            background: #166534;
+            border-radius: 2px;
+        }
+
+        .cherry::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            width: 5px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+
+        /* Candles */
+        .candles-container {
+            position: absolute;
+            bottom: 260px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 35px;
+        }
+
+        .candle {
+            position: relative;
+            width: 14px;
+            height: 55px;
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 30%, #fcd34d 70%, #f59e0b 100%);
+            border-radius: 4px 4px 2px 2px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+            border-radius: 1px;
+        }
+
+        /* Candle stripes */
+        .candle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                180deg,
+                transparent 0px,
+                transparent 8px,
+                rgba(255, 107, 157, 0.6) 8px,
+                rgba(255, 107, 157, 0.6) 16px
+            );
+            border-radius: 4px 4px 2px 2px;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 28px;
+            background: radial-gradient(ellipse at center bottom, #fff 0%, #fef08a 20%, #fbbf24 40%, #f97316 65%, #ef4444 85%, transparent 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.15s ease-in-out infinite alternate;
+            filter: blur(0.5px);
+            box-shadow: 
+                0 0 10px #fbbf24,
+                0 0 20px #f97316,
+                0 0 30px #ef4444,
+                0 0 40px rgba(239, 68, 68, 0.5);
+        }
+
+        .flame::before {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 10px;
+            background: radial-gradient(ellipse at center, #fff 0%, #fef9c3 100%);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        /* Sparkles around cake */
+        .sparkle {
+            position: absolute;
+            font-size: 1.2rem;
+            animation: sparkle 2s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .sparkle:nth-child(1) { top: 20px; left: 10px; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 50px; right: 5px; animation-delay: 0.4s; }
+        .sparkle:nth-child(3) { top: 120px; left: -15px; animation-delay: 0.8s; }
+        .sparkle:nth-child(4) { top: 150px; right: -10px; animation-delay: 1.2s; }
+        .sparkle:nth-child(5) { top: 80px; left: -20px; animation-delay: 1.6s; }
+        .sparkle:nth-child(6) { top: 30px; right: -15px; animation-delay: 0.2s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Blown state */
+        .candles-container.blown .flame {
+            animation: blowOut 0.3s ease-out forwards;
+        }
+
+        @keyframes blowOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateX(-50%) scale(1.5) translateY(-10px); }
+            100% { opacity: 0; transform: translateX(-50%) scale(0) translateY(-20px); }
+        }
+
+        .candles-container.blown .candle {
+            box-shadow: none;
+        }
+
+        /* Smoke effect when blown */
+        .smoke {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: rgba(156, 163, 175, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+            display: none;
+        }
+
+        .candles-container.blown .smoke {
+            display: block;
+            animation: smokeRise 2s ease-out infinite;
+        }
+
+        @keyframes smokeRise {
+            0% { opacity: 0.6; transform: translateX(-50%) translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(2); }
+        }
+
+        /* Cake Message */
+        .cake-message {
+            margin-top: 40px;
+            padding: 25px 45px;
+            background: linear-gradient(135deg, var(--bg-terminal) 0%, rgba(255, 107, 157, 0.05) 100%);
+            border: 2px solid var(--neon-pink);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.2);
+        }
+
+        .cake-message:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 107, 157, 0.3);
+        }
+
+        .cake-message h3 {
+            color: var(--neon-pink);
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+        }
+
+        .cake-message p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .blow-candles-btn {
+            margin-top: 30px;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ef4444 100%);
+            border: none;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .blow-candles-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(249, 115, 22, 0.5);
+        }
+
+        .blow-candles-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .wish-message {
+            display: none;
+            margin-top: 25px;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, rgba(126, 231, 135, 0.15) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 2px solid var(--text-green);
+            border-radius: 15px;
+            color: var(--text-green);
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 10px 30px rgba(126, 231, 135, 0.2);
+        }
+
+        .wish-message.show {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-gray);
+        }
+
+        footer .heart {
+            color: var(--neon-pink);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        /* Confetti Container */
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: fall linear forwards;
+            filter: drop-shadow(0 0 5px rgba(255, 107, 157, 0.5));
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(1080deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Music Toggle */
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-terminal);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .music-toggle:hover {
+            background: var(--neon-pink);
+            color: var(--bg-dark);
+        }
+
+        .music-toggle.playing {
+            animation: pulse 1s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-3d-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .card-3d-container {
+                width: 280px;
+                height: 350px;
+            }
+
+            .commit-card {
+                padding: 20px;
+            }
+
+            .commit-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .terminal-body {
+                font-size: 0.85rem;
+                padding: 15px;
+            }
+
+            .merge-card {
+                padding: 25px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" loop preload="auto" autoplay playsinline>
+        <source src="assets/audio/hbd.mp4" type="audio/mp4">
+    </audio>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div class="boot-text" id="boot-1">[INFO] Booting LoveOS v1.0.0...<span class="cursor">_</span></div>
+        <div class="boot-text" id="boot-2">[LOAD] importing tojo from my_heart... ✓</div>
+        <div class="boot-text" id="boot-3">[INIT] await feelings.connect(tojo)... ✓ bonded</div>
+        <div class="boot-text" id="boot-4">[BUILD] npm run love --forever... ██████ 100%</div>
+        <div class="boot-text" id="boot-5">[EXEC] birthday_surprise.exe starting...</div>
+        <div class="boot-heart" id="boot-heart">💖</div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="version-badge">🚀 Release v1.0.0 | 2026-02-05 | stable</div>
+            <h1>tojo.birthday()</h1>
+            <p class="subtitle">// returns: infinite happiness &nbsp;|&nbsp; complexity: O(∞ love)</p>
+
+            <div class="commit-card">
+                <div class="commit-header">
+                    <span class="icon">�</span>
+                    <span>main ← feature/birthday-celebration</span>
+                </div>
+                <div class="commit-title">
+                    feat(heart): implement Tojo's birthday module 🎉
+                </div>
+                <div class="commit-body">
+                    <p style="color: var(--text-green);">/** CHANGELOG v1.0.0 */</p>
+                    <p><span style="color: var(--neon-cyan);">const</span> tojo = <span style="color: var(--neon-pink);">require</span>(<span style="color: var(--text-green);">'my-whole-heart'</span>);</p>
+                    <p style="margin-top: 15px; color: var(--text-gray);">// She's not a bug, she's a feature I never knew I needed</p>
+                    <p style="color: var(--text-gray);">// My code compiles, but my heart compiled the moment I met her</p>
+                    <p style="color: var(--text-gray);">// 404: Life without her - Not Found</p>
+                    <p style="margin-top: 15px;"><span style="color: var(--neon-cyan);">return</span> <span style="color: var(--text-green);">"Happy Birthday, Tojo! ❤️"</span>;</p>
+                </div>
+                <div class="commit-stats">
+                    <span class="stat">+∞ insertions(love)</span>
+                    <span class="stat">-0 deletions</span>
+                    <span class="stat love">✔ CI/CD: passing</span>
+                    <span class="stat">📦 deployed to: heart</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section" id="gallery-section">
+            <div class="git-container">
+                <h2 class="section-title">📸 const memories = [...]</h2>
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Images will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Heart Section -->
+        <section class="heart-3d-section" id="heart-3d-section">
+            <h2 class="heart-3d-title">💝 render3D(myLoveForYou)</h2>
+            
+            <div class="content-3d-wrapper">
+                <div class="cube-wrapper">
+                    <div class="cube-container">
+                        <div class="cube">
+                            <div class="cube-face front">💖</div>
+                            <div class="cube-face back">💕</div>
+                            <div class="cube-face right">💗</div>
+                            <div class="cube-face left">💝</div>
+                            <div class="cube-face top">✨</div>
+                            <div class="cube-face bottom">🎂</div>
+                        </div>
+                    </div>
+                    
+                    <p class="heart-3d-text">
+                        // My love for you renders in all dimensions<br>
+                        // X: width of my smile when I see you<br>
+                        // Y: height of my happiness with you<br>
+                        // Z: depth of my feelings for you<br>
+                        // Result: ∞³ (infinity cubed)
+                    </p>
+                </div>
+
+                <!-- 3D Flip Card -->
+                <div class="card-3d-container">
+                    <div class="card-3d" id="gift-card" role="button" tabindex="0" aria-label="Open special gift">
+                        <div class="card-3d-face card-3d-front">
+                            <div class="icon">🎁</div>
+                            <h3>A Special Gift</h3>
+                            <p>Click to unwrap...</p>
+                        </div>
+                        <div class="card-3d-face card-3d-back">
+                            <p>
+                            Dear Tojo,<br><br>
+                            Every day with you is like<br>
+                            a perfectly executed function—<br>
+                            it just works beautifully.<br><br>
+                            Happy Birthday! 🎂<br>
+                        </p>
+                        <div class="signature">— Forever Yours 💜</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terminal Section -->
+        <div class="btn-container">
+            <button class="btn primary" onclick="runTerminal()">
+                <span>▶</span> node love.js
+            </button>
+        </div>
+        <section class="terminal-section" id="terminal-section">
+            <h2 class="section-title">💻 console.log(loveLetter)</h2>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                    <span class="terminal-title">node love.js — bash</span>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-line" id="line-0">
+                        <span class="prompt">$</span> <span class="command">node love.js --target=tojo --mode=birthday</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Git Log Section -->
+        <section class="git-section" id="git-section">
+            <div class="git-container">
+                <h2 class="section-title">📜 git log --oneline --graph --decorate</h2>
+                <div class="git-log">
+                    <div class="commit-item">
+                        <div class="commit-hash">a1b2c3d (HEAD -> main, origin/main)</div>
+                        <div class="commit-message">feat: tojo.smile() → triggered instant crush.exe</div>
+                        <div class="commit-date">Author: me &lt;hopelessly@inlove.dev&gt;</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">e4f5g6h</div>
+                        <div class="commit-message">fix(heart): patch loneliness bug with tojo.presence()</div>
+                        <div class="commit-date">Merge: successful | Conflicts: none 💚</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">i7j8k9l</div>
+                        <div class="commit-message">refactor: moved tojo to priority_queue[0]</div>
+                        <div class="commit-date">// she's always first in the stack</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">m0n1o2p</div>
+                        <div class="commit-message">feat: her.kindness extends BaseClass(Beautiful)</div>
+                        <div class="commit-date">Lines changed: +∞, -0</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">q3r4s5t</div>
+                        <div class="commit-message">perf: optimized my life O(n²) → O(1) with tojo</div>
+                        <div class="commit-date">Benchmark: happiness.level = MAX_INT</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">u6v7w8x</div>
+                        <div class="commit-message">docs: README.md → "she's absolutely perfect"</div>
+                        <div class="commit-date">Documentation: 100% accurate ✓</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">y9z0a1b</div>
+                        <div class="commit-message">feat: tojo.laugh() now my favorite sound.play()</div>
+                        <div class="commit-date">Audio: best_track.mp3 | Loop: infinite</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">c2d3e4f</div>
+                        <div class="commit-message">test: assert(falling_for_her === true) // always passes</div>
+                        <div class="commit-date">Test coverage: 100% | Flaky: never</div>
+                    </div>
+                    <div class="commit-item">
+                        <div class="commit-hash">g5h6i7j (tag: v1.0.0-birthday)</div>
+                        <div class="commit-message">release: Happy Birthday Tojo! 🎂 v1.0.0</div>
+                        <div class="commit-date">Date: 2026-02-05 | Build: stable | Status: 💚 deployed</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Birthday Cake Section -->
+        <section class="cake-section" id="cake-section">
+            <h2 class="cake-title">🎂 new BirthdayCake("Tojo")</h2>
+            <p class="cake-subtitle">// Make a wish and blow the candles! ✨</p>
+            
+            <div class="cake-wrapper">
+                <!-- Sparkles -->
+                <div class="sparkle">✨</div>
+                <div class="sparkle">⭐</div>
+                <div class="sparkle">💫</div>
+                <div class="sparkle">✨</div>
+                <div class="sparkle">⭐</div>
+                <div class="sparkle">💫</div>
+                
+                <div class="birthday-cake">
+                    <!-- Cake Stand -->
+                    <div class="cake-stand"></div>
+                    
+                    <!-- Bottom Layer - Pink -->
+                    <div class="layer-bottom"></div>
+                    
+                    <!-- Middle Layer - Purple -->
+                    <div class="layer-middle"></div>
+                    
+                    <!-- Top Layer - Cyan -->
+                    <div class="layer-top"></div>
+                    
+                    <!-- Cherries on top -->
+                    <div class="decorations">
+                        <div class="cherry"></div>
+                        <div class="cherry"></div>
+                        <div class="cherry"></div>
+                    </div>
+                    
+                    <!-- Candles -->
+                    <div class="candles-container" id="cake-candles">
+                        <div class="candle">
+                            <div class="flame"></div>
+                            <div class="smoke"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="flame"></div>
+                            <div class="smoke"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="flame"></div>
+                            <div class="smoke"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cake-message">
+                <h3>🎀 For My Tojo 🎀</h3>
+                
+                <div style="margin: 15px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+                    <p style="font-family: monospace; font-size: 1rem;">
+                        <span style="color: var(--neon-cyan);">const</span> myWorld = <span style="color: var(--text-green);">"You"</span>;
+                    </p>
+                    <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">// You are the documentation to my chaotic life 📝</p>
+                </div>
+
+                <div style="margin: 15px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+                    <p style="font-family: monospace; font-size: 1rem;">
+                        <span style="color: var(--neon-cyan);">if</span> (you.smile()) { <span style="color: var(--neon-pink);">myDay</span>.<span style="color: var(--neon-purple);">brighten</span>(); }
+                    </p>
+                    <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">// Your happiness is my priority thread ⚡</p>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <p style="font-family: monospace; font-size: 1rem;">
+                        <span style="color: var(--neon-pink);">Promise</span>.<span style="color: var(--neon-purple);">resolve</span>(<span style="color: var(--text-green);">"Forever"</span>);
+                    </p>
+                    <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">// Committing to you in every version of reality 💍</p>
+                </div>
+            </div>
+
+            <button class="blow-candles-btn" onclick="blowCandles()">🌬️ Blow the Candles & Make a Wish!</button>
+            <div class="wish-message" id="wish-message">
+                ✨ Your wish has been committed to the universe's main branch! ✨<br>
+                <span style="color: var(--text-gray); font-size: 0.9rem;">// return "Happy Birthday, my love! You deserve all the happiness! 💕";</span>
+            </div>
+        </section>
+
+        <!-- Merge Request Section -->
+        <section class="merge-section" id="merge-section">
+            <h2 class="section-title" style="justify-content: center;">🔀 Pull Request #1337</h2>
+            <div class="merge-card">
+                <div class="merge-icon">💚</div>
+                <h3 class="merge-title">PR: Merge my_life into our_future</h3>
+                <p class="merge-desc" style="text-align: left; font-size: 0.9rem;">
+                    <span style="color: var(--neon-cyan);">base:</span> our-future ← <span style="color: var(--neon-pink);">compare:</span> my-heart<br><br>
+                    <span style="color: var(--text-green);">✔ All checks passed</span><br>
+                    <span style="color: var(--text-gray);">ci/love-test — passed in ∞s</span><br>
+                    <span style="color: var(--text-gray);">ci/commitment-check — 100% coverage</span><br><br>
+                    <strong>Changes:</strong> forever.js (+∞, -0)<br>
+                    <strong>Reviewers:</strong> @tojo 💜<br>
+                    <strong>Labels:</strong> <span style="background: var(--neon-pink); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem;">love</span> <span style="background: var(--neon-purple); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem;">priority: critical</span>
+                </p>
+                <button class="merge-btn" onclick="acceptMerge()">✔ Squash and Merge</button>
+                <div class="merge-success" id="merge-success">
+                    <strong>🎉 Pull request successfully merged and closed</strong><br><br>
+                    <span style="color: var(--text-gray);">Branch my-heart has been merged into our-future</span><br>
+                    <span style="color: var(--neon-pink);">You can safely delete the branch: loneliness</span><br><br>
+                    <span style="color: var(--text-green);">🚀 Deployed to: together-forever.love</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>/* Made with <span class="heart">❤️</span> && lots of coffee */</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">v1.0.0 | build: 2026.02.05 | uptime: forever | bugs: 0 (she's perfect)</p>
+            <p style="margin-top: 5px; font-size: 0.8rem; color: var(--text-gray);">// TODO: love her more (if that's even possible)</p>
+        </footer>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container"></div>
+
+    <!-- Music Toggle -->
+    <button class="music-toggle" id="music-toggle" type="button" aria-label="Toggle birthday music">🎵</button>
+
+    <script>
+        // Boot Sequence
+        const bootSequence = async () => {
+            const bootTexts = ['boot-1', 'boot-2', 'boot-3', 'boot-4', 'boot-5', 'boot-heart'];
+            
+            for (let i = 0; i < bootTexts.length; i++) {
+                await delay(600);
+                document.getElementById(bootTexts[i]).classList.add('show');
+            }
+            
+            await delay(1500);
+            document.getElementById('boot-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.add('show');
+            
+            // Initial confetti burst
+            createConfetti(30);
+        };
+
+        // Utility function for delays
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Terminal Animation
+        const terminalLines = [
+            { type: 'output', text: '> node love.js' },
+            { type: 'output', text: '' },
+            { type: 'output', text: '📦 Loading dependencies...' },
+            { type: 'output', text: '✔ tojo@latest installed' },
+            { type: 'output', text: '✔ happiness@infinite installed' },
+            { type: 'output', text: '' },
+            { type: 'output', text: '// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' },
+            { type: 'output', text: '// love.js - A letter for Tojo' },
+            { type: 'output', text: '// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' },
+            { type: 'output', text: '' },
+            { type: 'output', text: 'const tojo = {' },
+            { type: 'output', text: '  name: "The most beautiful human",' },
+            { type: 'output', text: '  birthday: new Date("2026-02-05"),' },
+            { type: 'output', text: '  qualities: [∞],  // array too small' },
+            { type: 'output', text: '  smile: () => myHeart.melt(),' },
+            { type: 'output', text: '  laugh: () => bestSound.play(),' },
+            { type: 'output', text: '};' },
+            { type: 'output', text: '' },
+            { type: 'output', text: 'const myLove = {' },
+            { type: 'output', text: '  for: tojo,' },
+            { type: 'output', text: '  amount: Infinity,' },
+            { type: 'output', text: '  expiry: null,  // never expires' },
+            { type: 'output', text: '  bugs: 0,' },
+            { type: 'output', text: '};' },
+            { type: 'output', text: '' },
+            { type: 'output', text: 'while (true) {' },
+            { type: 'output', text: '  console.log("I love you, Tojo ❤️");' },
+            { type: 'output', text: '  myLove.amount++;  // somehow still works' },
+            { type: 'output', text: '}' },
+            { type: 'output', text: '' },
+            { type: 'output', text: '/**' },
+            { type: 'output', text: ' * Happy Birthday, Tojo! 🎂' },
+            { type: 'output', text: ' * ' },
+            { type: 'output', text: ' * You\'re not a bug, you\'re the feature' },
+            { type: 'output', text: ' * I didn\'t know I was missing.' },
+            { type: 'output', text: ' * ' },
+            { type: 'output', text: ' * My code may have bugs,' },
+            { type: 'output', text: ' * but my love for you is production-ready.' },
+            { type: 'output', text: ' * ' },
+            { type: 'output', text: ' * Forever yours,' },
+            { type: 'output', text: ' * Your developer boyfriend 💜' },
+            { type: 'output', text: ' */' },
+            { type: 'output', text: '' },
+            { type: 'output', text: '// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' },
+            { type: 'output', text: '' },
+            { type: 'output', text: '✔ Execution complete' },
+            { type: 'output', text: '✔ 0 errors, 0 warnings, ∞ love' },
+            { type: 'output', text: '💬 Output: "Tojo is loved infinitely"' },
+        ];
+
+        let terminalRunning = false;
+
+        const runTerminal = async () => {
+            if (terminalRunning) return;
+            terminalRunning = true;
+
+            scrollToSection('terminal-section');
+            
+            const terminalBody = document.getElementById('terminal-body');
+            const firstLine = document.getElementById('line-0');
+            firstLine.classList.add('show');
+
+            await delay(500);
+
+            for (let i = 0; i < terminalLines.length; i++) {
+                const line = terminalLines[i];
+                const lineEl = document.createElement('div');
+                lineEl.className = 'terminal-line';
+                
+                if (line.text.includes('💕') || line.text.includes('❤️') || line.text.includes('💖') || line.text.includes('🎂')) {
+                    lineEl.innerHTML = `<span class="output heart">${line.text}</span>`;
+                } else {
+                    lineEl.innerHTML = `<span class="output">${line.text}</span>`;
+                }
+                
+                terminalBody.appendChild(lineEl);
+                await delay(80);
+                lineEl.classList.add('show');
+                
+                // Auto scroll terminal
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+
+            createConfetti(20);
+            terminalRunning = false;
+        };
+
+        // Scroll to section
+        const scrollToSection = (id) => {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // Accept Merge
+        const acceptMerge = () => {
+            const successEl = document.getElementById('merge-success');
+            successEl.classList.add('show');
+            createConfetti(50);
+            playSuccessSound();
+        };
+
+        // Blow Candles
+        const blowCandles = () => {
+            const candles = document.getElementById('cake-candles');
+            const wishMessage = document.getElementById('wish-message');
+            
+            if (candles.classList.contains('blown')) {
+                // Relight candles
+                candles.classList.remove('blown');
+                wishMessage.classList.remove('show');
+            } else {
+                // Blow out candles
+                candles.classList.add('blown');
+                wishMessage.classList.add('show');
+                createConfetti(40);
+                playSuccessSound();
+                
+                // Play blow sound effect
+                initAudio();
+                const noise = audioContext.createOscillator();
+                const noiseGain = audioContext.createGain();
+                noise.type = 'sine';
+                noise.frequency.value = 200;
+                noise.connect(noiseGain);
+                noiseGain.connect(audioContext.destination);
+                noiseGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                noise.start();
+                noise.stop(audioContext.currentTime + 0.5);
+            }
+        };
+
+        // Confetti
+        const createConfetti = (count) => {
+            const container = document.getElementById('confetti-container');
+            const emojis = ['❤️', '💕', '💖', '💗', '💝', '🎂', '🎉', '🎊', '✨', '🌟'];
+            
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                // Much slower fall - 8 to 15 seconds
+                confetti.style.animationDuration = (Math.random() * 7 + 8) + 's';
+                confetti.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                // Add delay so they don't all fall at once
+                confetti.style.animationDelay = (Math.random() * 2) + 's';
+                container.appendChild(confetti);
+                
+                // Remove after 18 seconds (much longer)
+                setTimeout(() => confetti.remove(), 18000);
+            }
+        };
+
+        // Simple WebAudio tones
+        let audioContext;
+        let musicPlaying = false;
+
+        const initAudio = () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        };
+
+        const playTone = (frequency, duration, type = 'sine') => {
+            initAudio();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.type = type;
+            oscillator.frequency.value = frequency;
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        };
+
+        const playSuccessSound = () => {
+            initAudio();
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((note, i) => {
+                setTimeout(() => playTone(note, 0.3), i * 150);
+            });
+        };
+
+        const toggleMusic = () => {
+            const btn = document.getElementById('music-toggle');
+            const audio = document.getElementById('bg-music');
+            
+            if (musicPlaying) {
+                audio.pause();
+                btn.classList.remove('playing');
+                btn.textContent = '🎵';
+                musicPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    btn.classList.add('playing');
+                    btn.textContent = '🔊';
+                    musicPlaying = true;
+                }).catch(e => {
+                    console.log("Audio play failed:", e);
+                    // interaction required
+                });
+            }
+        };
+
+        // Load Gallery Images
+        const loadGallery = () => {
+            const gallery = document.getElementById('gallery-grid');
+            const imageCount = 7; // Update this number if you add more images
+            
+            for (let i = 1; i <= imageCount; i++) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
+                const img = document.createElement('img');
+                img.src = `assets/images/${i}.jpg`;
+                img.alt = `Memory ${i}`;
+                img.onerror = function() {
+                    // Try png if jpg fails
+                    this.src = `assets/images/${i}.png`;
+                    this.onerror = function() {
+                        // Hide if both fail
+                        item.style.display = 'none';
+                    };
+                };
+                
+                item.appendChild(img);
+                gallery.appendChild(item);
+            }
+        };
+
+        // Initialize
+        window.onload = () => {
+            bootSequence();
+            loadGallery();
+            
+            // Wire up Gift Card click
+            const giftCard = document.getElementById('gift-card');
+            if (giftCard) {
+                giftCard.addEventListener('click', () => {
+                   giftCard.classList.toggle('flipped');
+                });
+            }
+
+            // Try to play music automatically
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            
+            audio.volume = 0.5; // Start at 50% volume
+            
+            const startPlay = () => {
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    btn.classList.add('playing');
+                    btn.textContent = '🔊';
+                }).catch(e => console.log("Audio play failed:", e));
+            };
+
+            // Attempt auto-play
+            startPlay();
+
+            // If auto-play block, start on first interaction
+            document.addEventListener('click', function initClick() {
+                if (!musicPlaying) {
+                    startPlay();
+                }
+                document.removeEventListener('click', initClick);
+            }, { once: true });
+        };
+    </script>
+</body>
+</html>
